@@ -1,5 +1,4 @@
 import 'package:easyway/dashboard.dart';
-import 'package:easyway/sample.dart';
 import 'package:flutter/material.dart';
 
 void main() {

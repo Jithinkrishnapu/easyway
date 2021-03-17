@@ -16,20 +16,22 @@ class _DashboardState extends State<Dashboard> {
   final _referenceData = FirebaseDatabase.instance;
   DateTime _date;
   Query dataRef;
-  int count;
+  Map myList ={};
+  String name;
   @override
   void initState() {
     // final FirebaseDatabase database =FirebaseDatabase(app: widget.app);
-    dataRef=FirebaseDatabase.instance.reference().child('orders').orderByChild('isDelivered').equalTo(false);
+    dataRef=FirebaseDatabase.instance.reference().child('orders').orderByChild('isDelivered')
+    ;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget buildorder({Map orders}){
-      return Center(child: Text(orders['isDelivered'].toString(),style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),));
-    }
-    final ref = _referenceData.reference();
+    // Widget buildorder({Map orders,int count}){
+    //   return Center(child: Text(orders['isDelivered'].toString(),style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),));
+    // }
+    // final ref = _referenceData.reference();
     var _height=MediaQuery.of(context).size.height;
     var _width=MediaQuery.of(context).size.width;
 
@@ -160,11 +162,37 @@ class _DashboardState extends State<Dashboard> {
                   ]
               ),
               child: FirebaseAnimatedList(
-                query: dataRef,itemBuilder: (BuildContext context,DataSnapshot snapshot,Animation<double>animation,int index){
-                  // count=snapshot.value;
-                Map orders=snapshot.value;
+                query:dataRef,itemBuilder: (BuildContext context,DataSnapshot snapshot,Animation<double>animation,int index){
+                   // for(var value in snapshot.value['isDelivered']){
+                   //   myList.update("data1":snapshot.value['isDelivered']);
+                   //   print(myList);
+                   // }
 
-                  return buildorder(orders:orders.length as Map );
+                  // print(snapshot.value)  ;
+                 // Map orders=snapshot.value;
+                // return buildorder(orders: orders);
+                myList ={"snap":snapshot.value['isDelivered'].toString()};
+
+
+
+
+                if(snapshot.value['isDelivered'] != false){
+                  name="Delivered";
+                }else {
+                  name="Postponed";
+                }
+                print(myList);
+                return Padding(
+                  padding: const EdgeInsets.only(left: 40,right: 40,top: 40),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(name+" :",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                      Text(myList.length.toString(),style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                );
               },
               )
             ),
